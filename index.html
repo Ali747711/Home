@@ -5,7 +5,512 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Assignment Tracker</title>
     <style>
-        <link rel="stylesheet" href="style.css">
+        :root {
+            --primary: #4361ee;
+            --secondary: #7209b7;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #2ec4b6;
+            --danger: #e63946;
+            --warning: #f9c74f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: var(--dark);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo p {
+            font-size: 1rem;
+            opacity: 0.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Animated background shapes for header */
+        header::before, header::after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            z-index: 0;
+        }
+
+        header::before {
+            top: -150px;
+            left: -100px;
+            animation: float 15s infinite ease-in-out alternate;
+        }
+
+        header::after {
+            bottom: -150px;
+            right: -70px;
+            width: 250px;
+            height: 250px;
+            animation: float 18s infinite ease-in-out alternate-reverse;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(30px, 30px) rotate(15deg); }
+        }
+
+        .profile {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            margin: 30px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .profile:hover {
+            transform: translateY(-5px);
+        }
+
+        .profile-info {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .profile-info h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .profile-info h2::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+        }
+
+        .profile-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 15px;
+            width: calc(33.333% - 10px);
+            min-width: 120px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+
+        .stat-card p {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .assignment-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .assignment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .assignment-header h2 {
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .assignment-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #3a54d6;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #d63545;
+        }
+
+        .assignment-form {
+            margin-bottom: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: none;
+            animation: slideDown 0.4s ease forwards;
+        }
+
+        @keyframes slideDown {
+            from { 
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .assignment-list {
+            list-style: none;
+        }
+
+        .assignment-item {
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            background-color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .assignment-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-color: #dee2e6;
+        }
+
+        .assignment-info {
+            flex: 1;
+        }
+
+        .assignment-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+
+        .assignment-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 10px;
+        }
+
+        .assignment-detail {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .deadline {
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .deadline.urgent {
+            color: var(--danger);
+        }
+
+        .deadline.approaching {
+            color: var(--warning);
+        }
+
+        .deadline.safe {
+            color: var(--success);
+        }
+
+        .subject-tag {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: white;
+            background-color: var(--primary);
+        }
+
+        .priority-badge {
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .priority-high {
+            background-color: var(--danger);
+        }
+
+        .priority-medium {
+            background-color: var(--warning);
+            color: #212529;
+        }
+
+        .priority-low {
+            background-color: var(--success);
+        }
+
+        .assignment-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: #f8f9fa;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-icon:hover {
+            background-color: #e9ecef;
+            transform: scale(1.1);
+        }
+
+        .btn-icon.delete:hover {
+            background-color: #f8d7da;
+            color: var(--danger);
+        }
+
+        .btn-icon.edit:hover {
+            background-color: #e2e3e5;
+            color: var(--dark);
+        }
+
+        .btn-icon.complete:hover {
+            background-color: #d1e7dd;
+            color: var(--success);
+        }
+
+        .completed {
+            opacity: 0.6;
+        }
+
+        .completed .assignment-title {
+            text-decoration: line-through;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6c757d;
+        }
+
+        .empty-state img {
+            max-width: 200px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .filter-section {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .search-container {
+            position: relative;
+            flex: 2;
+            min-width: 300px;
+        }
+
+        .search-container input {
+            padding-left: 40px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+
+        @media (max-width: 768px) {
+            .profile {
+                flex-direction: column;
+            }
+            
+            .stat-card {
+                width: calc(50% - 10px);
+            }
+            
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .assignment-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .assignment-actions {
+                margin-top: 15px;
+                align-self: flex-end;
+            }
+        }
     </style>
 </head>
 <body>
@@ -19,12 +524,13 @@
     </header>
 
     <div class="container">
+        <!-- Profile Section -->
         <section class="profile">
             <div class="profile-info">
                 <h2>Your Profile</h2>
                 <div contenteditable="true" id="profileName" class="form-control" style="margin-bottom: 10px; font-weight: bold;">Your Name</div>
                 <div contenteditable="true" id="profileBio" class="form-control" style="min-height: 80px;">Add your bio or any information about yourself here. Click to edit.</div>
-
+                
                 <div class="profile-stats">
                     <div class="stat-card">
                         <h3 id="totalAssignments">0</h3>
@@ -42,6 +548,7 @@
             </div>
         </section>
 
+        <!-- Assignment Section -->
         <section class="assignment-container">
             <div class="assignment-header">
                 <h2>Your Assignments</h2>
@@ -50,6 +557,7 @@
                 </button>
             </div>
 
+            <!-- Filter & Search -->
             <div class="filter-section">
                 <div class="search-container">
                     <span class="search-icon">🔍</span>
@@ -72,6 +580,7 @@
                 </div>
             </div>
 
+            <!-- Assignment Form -->
             <div id="assignmentForm" class="assignment-form">
                 <div class="form-row">
                     <div class="form-group">
@@ -107,9 +616,12 @@
                 </div>
             </div>
 
+            <!-- Assignment List -->
             <ul id="assignmentList" class="assignment-list">
-                </ul>
+                <!-- Assignments will be added here dynamically -->
+            </ul>
 
+            <!-- Empty State -->
             <div id="emptyState" class="empty-state">
                 <img src="/api/placeholder/200/200" alt="No assignments">
                 <h3>No assignments yet!</h3>
@@ -148,14 +660,14 @@
             profileName.textContent = userProfile.name;
             profileBio.textContent = userProfile.bio;
         }
-
+        
         // Save user profile
         function saveUserProfile() {
             userProfile.name = profileName.textContent;
             userProfile.bio = profileBio.textContent;
             localStorage.setItem('userProfile', JSON.stringify(userProfile));
         }
-
+        
         // Event listeners for profile editing
         profileName.addEventListener('blur', saveUserProfile);
         profileBio.addEventListener('blur', saveUserProfile);
@@ -171,7 +683,8 @@
         addAssignmentBtn.addEventListener('click', () => {
             assignmentForm.style.display = 'block';
             document.getElementById('assignmentTitle').focus();
-            editingId = null;
+            editingId = null; // Reset editing state
+            // Reset form
             document.getElementById('assignmentTitle').value = '';
             document.getElementById('assignmentSubject').value = '';
             document.getElementById('assignmentDescription').value = '';
@@ -198,6 +711,7 @@
             }
 
             if (editingId !== null) {
+                // Update existing assignment
                 const index = assignments.findIndex(a => a.id === editingId);
                 if (index !== -1) {
                     assignments[index] = {
@@ -211,6 +725,7 @@
                     };
                 }
             } else {
+                // Add new assignment
                 const newAssignment = {
                     id: Date.now().toString(),
                     title,
@@ -221,3 +736,197 @@
                     completed: false,
                     createdAt: new Date().toISOString(),
                     lastUpdated: new Date().toISOString()
+                };
+                assignments.push(newAssignment);
+            }
+
+            // Save to localStorage
+            localStorage.setItem('assignments', JSON.stringify(assignments));
+            
+            // Hide form and render assignments
+            assignmentForm.style.display = 'none';
+            renderAssignments();
+            updateStats();
+        });
+
+        // Handle search and filtering
+        searchAssignment.addEventListener('input', renderAssignments);
+        filterStatus.addEventListener('change', renderAssignments);
+        filterPriority.addEventListener('change', renderAssignments);
+
+        // Render assignments
+        function renderAssignments() {
+            const searchTerm = searchAssignment.value.toLowerCase();
+            const statusFilter = filterStatus.value;
+            const priorityFilter = filterPriority.value;
+            
+            let filteredAssignments = assignments.filter(assignment => {
+                // Search filter
+                const matchesSearch = 
+                    assignment.title.toLowerCase().includes(searchTerm) ||
+                    assignment.subject.toLowerCase().includes(searchTerm) ||
+                    assignment.description.toLowerCase().includes(searchTerm);
+                
+                // Status filter
+                const matchesStatus = 
+                    statusFilter === 'all' || 
+                    (statusFilter === 'completed' && assignment.completed) ||
+                    (statusFilter === 'pending' && !assignment.completed);
+                
+                // Priority filter
+                const matchesPriority = 
+                    priorityFilter === 'all' || 
+                    assignment.priority === priorityFilter;
+                
+                return matchesSearch && matchesStatus && matchesPriority;
+            });
+            
+            // Sort by deadline (closest first)
+            filteredAssignments.sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
+            
+            // Empty state handling
+            if (filteredAssignments.length === 0) {
+                assignmentList.innerHTML = '';
+                emptyState.style.display = 'block';
+                if (assignments.length > 0) {
+                    emptyState.querySelector('h3').textContent = 'No matching assignments';
+                    emptyState.querySelector('p').textContent = 'Try adjusting your filters or search term';
+                } else {
+                    emptyState.querySelector('h3').textContent = 'No assignments yet!';
+                    emptyState.querySelector('p').textContent = 'Add your first assignment by clicking the "Add New Assignment" button above.';
+                }
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            assignmentList.innerHTML = '';
+            
+            filteredAssignments.forEach(assignment => {
+                const li = document.createElement('li');
+                li.className = `assignment-item ${assignment.completed ? 'completed' : ''}`;
+                
+                // Calculate days until deadline
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const deadlineDate = new Date(assignment.deadline);
+                deadlineDate.setHours(0, 0, 0, 0);
+                const daysUntil = Math.ceil((deadlineDate - today) / (1000 * 60 * 60 * 24));
+                
+                let deadlineClass = 'safe';
+                if (daysUntil < 0) deadlineClass = 'urgent';
+                else if (daysUntil <= 3) deadlineClass = 'approaching';
+                
+                let deadlineText = '';
+                if (daysUntil < 0) deadlineText = `${Math.abs(daysUntil)} days overdue`;
+                else if (daysUntil === 0) deadlineText = 'Due today';
+                else if (daysUntil === 1) deadlineText = 'Due tomorrow';
+                else deadlineText = `Due in ${daysUntil} days`;
+                
+                li.innerHTML = `
+                    <div class="assignment-info">
+                        <div class="assignment-title">${assignment.title}</div>
+                        <div class="subject-tag">${assignment.subject}</div>
+                        <span class="priority-badge priority-${assignment.priority}">${assignment.priority}</span>
+                        <p>${assignment.description}</p>
+                        <div class="assignment-details">
+                            <span class="assignment-detail">
+                                <span>📅</span>
+                                <span>${new Date(assignment.deadline).toLocaleDateString()}</span>
+                            </span>
+                            <span class="assignment-detail">
+                                <span>⏱️</span>
+                                <span class="deadline ${deadlineClass}">${deadlineText}</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="assignment-actions">
+                        <button class="btn-icon edit" data-id="${assignment.id}">✏️</button>
+                        <button class="btn-icon complete" data-id="${assignment.id}">${assignment.completed ? '↩️' : '✅'}</button>
+                        <button class="btn-icon delete" data-id="${assignment.id}">🗑️</button>
+                    </div>
+                `;
+                
+                assignmentList.appendChild(li);
+            });
+            
+            // Add event listeners to buttons
+            document.querySelectorAll('.btn-icon.edit').forEach(btn => {
+                btn.addEventListener('click', handleEdit);
+            });
+            
+            document.querySelectorAll('.btn-icon.complete').forEach(btn => {
+                btn.addEventListener('click', handleToggleComplete);
+            });
+            
+            document.querySelectorAll('.btn-icon.delete').forEach(btn => {
+                btn.addEventListener('click', handleDelete);
+            });
+        }
+
+        // Toggle complete status
+        function handleToggleComplete(e) {
+            const id = e.target.dataset.id;
+            const index = assignments.findIndex(a => a.id === id);
+            
+            if (index !== -1) {
+                assignments[index].completed = !assignments[index].completed;
+                assignments[index].lastUpdated = new Date().toISOString();
+                localStorage.setItem('assignments', JSON.stringify(assignments));
+                renderAssignments();
+                updateStats();
+            }
+        }
+
+        // Edit assignment
+        function handleEdit(e) {
+            const id = e.target.dataset.id;
+            const assignment = assignments.find(a => a.id === id);
+            
+            if (assignment) {
+                // Fill the form with assignment data
+                document.getElementById('assignmentTitle').value = assignment.title;
+                document.getElementById('assignmentSubject').value = assignment.subject;
+                document.getElementById('assignmentDescription').value = assignment.description;
+                document.getElementById('assignmentDeadline').value = assignment.deadline;
+                document.getElementById('assignmentPriority').value = assignment.priority;
+                
+                // Set editing state
+                editingId = id;
+                
+                // Show the form
+                assignmentForm.style.display = 'block';
+                document.getElementById('assignmentTitle').focus();
+                
+                // Scroll to form
+                assignmentForm.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Delete assignment
+        function handleDelete(e) {
+            const id = e.target.dataset.id;
+            
+            if (confirm('Are you sure you want to delete this assignment?')) {
+                assignments = assignments.filter(a => a.id !== id);
+                localStorage.setItem('assignments', JSON.stringify(assignments));
+                renderAssignments();
+                updateStats();
+            }
+        }
+
+        // Update statistics
+        function updateStats() {
+            const total = assignments.length;
+            const completed = assignments.filter(a => a.completed).length;
+            const pending = total - completed;
+            
+            totalAssignments.textContent = total;
+            completedAssignments.textContent = completed;
+            pendingAssignments.textContent = pending;
+        }
+
+        // Initialize app
+        init();
+    </script>
+</body>
+</html>
