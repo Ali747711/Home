@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assignment Tracker</title>
+    <title>Personal Dashboard</title>
     <style>
         :root {
             --primary: #4361ee;
@@ -26,6 +26,8 @@
             background-color: #f5f5f5;
             color: var(--dark);
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .container {
@@ -166,7 +168,7 @@
             color: #6c757d;
         }
 
-        .assignment-container {
+        .assignment-container, .apps-container {
             background-color: white;
             border-radius: 10px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -174,20 +176,20 @@
             margin-bottom: 30px;
         }
 
-        .assignment-header {
+        .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
 
-        .assignment-header h2 {
+        .section-header h2 {
             color: var(--primary);
             position: relative;
             display: inline-block;
         }
 
-        .assignment-header h2::after {
+        .section-header h2::after {
             content: '';
             position: absolute;
             bottom: -5px;
@@ -228,7 +230,7 @@
             background-color: #d63545;
         }
 
-        .assignment-form {
+        .assignment-form, .app-link-form {
             margin-bottom: 20px;
             background-color: #f8f9fa;
             border-radius: 8px;
@@ -488,6 +490,112 @@
             color: #6c757d;
         }
 
+        /* App Links Grid */
+        .app-links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .app-link-card {
+            background-color: var(--light);
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--dark);
+        }
+
+        .app-link-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .app-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .app-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .app-description {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+
+        /* Social Media Footer */
+        footer {
+            background-color: white;
+            padding: 30px 0;
+            margin-top: auto;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .social-link {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--light);
+            color: var(--dark);
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            transform: translateY(-5px);
+        }
+
+        .social-link.linkedin:hover {
+            background-color: #0077b5;
+            color: white;
+        }
+
+        .social-link.github:hover {
+            background-color: #333;
+            color: white;
+        }
+
+        .social-link.instagram:hover {
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            color: white;
+        }
+
+        .social-link.email:hover {
+            background-color: #ea4335;
+            color: white;
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
         @media (max-width: 768px) {
             .profile {
                 flex-direction: column;
@@ -510,6 +618,15 @@
                 margin-top: 15px;
                 align-self: flex-end;
             }
+            
+            .app-links-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .social-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
         }
     </style>
 </head>
@@ -517,8 +634,8 @@
     <header>
         <div class="container">
             <div class="logo">
-                <h1>Assignment Tracker</h1>
-                <p>Keep track of all your assignments in one place</p>
+                <h1>Personal Dashboard</h1>
+                <p>Manage your tasks, apps, and life in one place</p>
             </div>
         </div>
     </header>
@@ -548,9 +665,57 @@
             </div>
         </section>
 
+        <!-- App Links Section -->
+        <section class="apps-container">
+            <div class="section-header">
+                <h2>Your Applications</h2>
+                <button id="addAppLinkBtn" class="btn btn-primary">
+                    <span>+</span> Add New App Link
+                </button>
+            </div>
+
+            <!-- App Link Form -->
+            <div id="appLinkForm" class="app-link-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="appTitle">App Title</label>
+                        <input type="text" id="appTitle" class="form-control" placeholder="Enter app title">
+                    </div>
+                    <div class="form-group">
+                        <label for="appUrl">URL</label>
+                        <input type="url" id="appUrl" class="form-control" placeholder="https://example.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="appDescription">Description</label>
+                    <input type="text" id="appDescription" class="form-control" placeholder="Brief description">
+                </div>
+                <div class="form-group">
+                    <label for="appIcon">Icon (Emoji or Symbol)</label>
+                    <input type="text" id="appIcon" class="form-control" placeholder="📊">
+                </div>
+                <div class="form-actions">
+                    <button id="cancelAppBtn" class="btn btn-danger">Cancel</button>
+                    <button id="saveAppLinkBtn" class="btn btn-primary">Save App Link</button>
+                </div>
+            </div>
+
+            <!-- App Links Grid -->
+            <div id="appLinksGrid" class="app-links-grid">
+                <!-- App links will be added here dynamically -->
+            </div>
+
+            <!-- Empty State for App Links -->
+            <div id="emptyAppsState" class="empty-state">
+                <img src="/api/placeholder/200/200" alt="No app links">
+                <h3>No app links yet!</h3>
+                <p>Add your first app link by clicking the "Add New App Link" button above.</p>
+            </div>
+        </section>
+
         <!-- Assignment Section -->
         <section class="assignment-container">
-            <div class="assignment-header">
+            <div class="section-header">
                 <h2>Your Assignments</h2>
                 <button id="addAssignmentBtn" class="btn btn-primary">
                     <span>+</span> Add New Assignment
@@ -630,6 +795,29 @@
         </section>
     </div>
 
+    <!-- Footer with Social Links -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="social-links">
+                    <a href="#" id="linkedinLink" class="social-link linkedin">
+                        <span>in</span>
+                    </a>
+                    <a href="#" id="githubLink" class="social-link github">
+                        <span>GH</span>
+                    </a>
+                    <a href="#" id="instagramLink" class="social-link instagram">
+                        <span>IG</span>
+                    </a>
+                    <a href="#" id="emailLink" class="social-link email">
+                        <span>✉️</span>
+                    </a>
+                </div>
+                <p class="copyright">© <span id="currentYear">2025</span> <span id="copyrightName">Your Name</span>. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
     <script>
         // DOM Elements
         const addAssignmentBtn = document.getElementById('addAssignmentBtn');
@@ -646,19 +834,43 @@
         const pendingAssignments = document.getElementById('pendingAssignments');
         const profileName = document.getElementById('profileName');
         const profileBio = document.getElementById('profileBio');
-
+        const addAppLinkBtn = document.getElementById('addAppLinkBtn');
+        const appLinkForm = document.getElementById('appLinkForm');
+        const cancelAppBtn = document.getElementById('cancelAppBtn');
+        const saveAppLinkBtn = document.getElementById('saveAppLinkBtn');
+        const appLinksGrid = document.getElementById('appLinksGrid');
+        const emptyAppsState = document.getElementById('emptyAppsState');
+        const copyrightName = document.getElementById('copyrightName');
+        const currentYear = document.getElementById('currentYear');
+        const linkedinLink = document.getElementById('linkedinLink');
+        const githubLink = document.getElementById('githubLink');
+        const instagramLink = document.getElementById('instagramLink');
+        const emailLink = document.getElementById('emailLink');
+        
+        // Set current year
+        currentYear.textContent = new Date().getFullYear();
+        
         // State
         let assignments = JSON.parse(localStorage.getItem('assignments')) || [];
+        let appLinks = JSON.parse(localStorage.getItem('appLinks')) || [];
+        let socialLinks = JSON.parse(localStorage.getItem('socialLinks')) || {
+            linkedin: '#',
+            github: '#',
+            instagram: '#',
+            email: 'mailto:your.email@example.com'
+        };
         let editingId = null;
+        let editingAppId = null;
         let userProfile = JSON.parse(localStorage.getItem('userProfile')) || {
             name: 'Your Name',
             bio: 'Add your bio or any information about yourself here. Click to edit.'
         };
-
+        
         // Load user profile
         function loadUserProfile() {
             profileName.textContent = userProfile.name;
             profileBio.textContent = userProfile.bio;
+            copyrightName.textContent = userProfile.name;
         }
         
         // Save user profile
@@ -666,20 +878,31 @@
             userProfile.name = profileName.textContent;
             userProfile.bio = profileBio.textContent;
             localStorage.setItem('userProfile', JSON.stringify(userProfile));
+            copyrightName.textContent = userProfile.name;
+        }
+        
+        // Load social links
+        function loadSocialLinks() {
+            linkedinLink.href = socialLinks.linkedin;
+            githubLink.href = socialLinks.github;
+            instagramLink.href = socialLinks.instagram;
+            emailLink.href = socialLinks.email;
         }
         
         // Event listeners for profile editing
         profileName.addEventListener('blur', saveUserProfile);
         profileBio.addEventListener('blur', saveUserProfile);
-
+        
         // Initialize
         function init() {
             loadUserProfile();
+            loadSocialLinks();
             renderAssignments();
+            renderAppLinks();
             updateStats();
         }
-
-        // Toggle form visibility
+        
+        // Toggle assignment form visibility
         addAssignmentBtn.addEventListener('click', () => {
             assignmentForm.style.display = 'block';
             document.getElementById('assignmentTitle').focus();
@@ -691,12 +914,28 @@
             document.getElementById('assignmentDeadline').value = '';
             document.getElementById('assignmentPriority').value = 'low';
         });
-
-        // Cancel form
+        
+        // Toggle app link form visibility
+        addAppLinkBtn.addEventListener('click', () => {
+            appLinkForm.style.display = 'block';
+            document.getElementById('appTitle').focus();
+            editingAppId = null; // Reset editing state
+            // Reset form
+            document.getElementById('appTitle').value = '';
+            document.getElementById('appUrl').value = '';
+            document.getElementById('appDescription').value = '';
+            document.getElementById('appIcon').value = '';
+        });
+        
+        // Cancel forms
         cancelBtn.addEventListener('click', () => {
             assignmentForm.style.display = 'none';
         });
-
+        
+        cancelAppBtn.addEventListener('click', () => {
+            appLinkForm.style.display = 'none';
+        });
+        
         // Save assignment
         saveAssignmentBtn.addEventListener('click', () => {
             const title = document.getElementById('assignmentTitle').value.trim();
@@ -704,12 +943,12 @@
             const description = document.getElementById('assignmentDescription').value.trim();
             const deadline = document.getElementById('assignmentDeadline').value;
             const priority = document.getElementById('assignmentPriority').value;
-
+        
             if (!title || !subject || !deadline) {
                 alert('Please fill in all required fields (title, subject, and deadline)');
                 return;
             }
-
+        
             if (editingId !== null) {
                 // Update existing assignment
                 const index = assignments.findIndex(a => a.id === editingId);
@@ -720,12 +959,11 @@
                         subject,
                         description,
                         deadline,
-                        priority,
-                        lastUpdated: new Date().toISOString()
+                        priority
                     };
                 }
             } else {
-                // Add new assignment
+                // Create new assignment
                 const newAssignment = {
                     id: Date.now().toString(),
                     title,
@@ -734,178 +972,142 @@
                     deadline,
                     priority,
                     completed: false,
-                    createdAt: new Date().toISOString(),
-                    lastUpdated: new Date().toISOString()
+                    createdAt: new Date().toISOString()
                 };
                 assignments.push(newAssignment);
             }
-
+        
             // Save to localStorage
             localStorage.setItem('assignments', JSON.stringify(assignments));
-            
+        
             // Hide form and render assignments
             assignmentForm.style.display = 'none';
             renderAssignments();
             updateStats();
         });
-
-        // Handle search and filtering
-        searchAssignment.addEventListener('input', renderAssignments);
-        filterStatus.addEventListener('change', renderAssignments);
-        filterPriority.addEventListener('change', renderAssignments);
-
-        // Render assignments
-        function renderAssignments() {
-            const searchTerm = searchAssignment.value.toLowerCase();
-            const statusFilter = filterStatus.value;
-            const priorityFilter = filterPriority.value;
-            
-            let filteredAssignments = assignments.filter(assignment => {
-                // Search filter
-                const matchesSearch = 
-                    assignment.title.toLowerCase().includes(searchTerm) ||
-                    assignment.subject.toLowerCase().includes(searchTerm) ||
-                    assignment.description.toLowerCase().includes(searchTerm);
-                
-                // Status filter
-                const matchesStatus = 
-                    statusFilter === 'all' || 
-                    (statusFilter === 'completed' && assignment.completed) ||
-                    (statusFilter === 'pending' && !assignment.completed);
-                
-                // Priority filter
-                const matchesPriority = 
-                    priorityFilter === 'all' || 
-                    assignment.priority === priorityFilter;
-                
-                return matchesSearch && matchesStatus && matchesPriority;
-            });
-            
-            // Sort by deadline (closest first)
-            filteredAssignments.sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
-            
-            // Empty state handling
-            if (filteredAssignments.length === 0) {
-                assignmentList.innerHTML = '';
-                emptyState.style.display = 'block';
-                if (assignments.length > 0) {
-                    emptyState.querySelector('h3').textContent = 'No matching assignments';
-                    emptyState.querySelector('p').textContent = 'Try adjusting your filters or search term';
-                } else {
-                    emptyState.querySelector('h3').textContent = 'No assignments yet!';
-                    emptyState.querySelector('p').textContent = 'Add your first assignment by clicking the "Add New Assignment" button above.';
-                }
+        
+        // Save app link
+        saveAppLinkBtn.addEventListener('click', () => {
+            const title = document.getElementById('appTitle').value.trim();
+            const url = document.getElementById('appUrl').value.trim();
+            const description = document.getElementById('appDescription').value.trim();
+            const icon = document.getElementById('appIcon').value.trim();
+        
+            if (!title || !url) {
+                alert('Please fill in all required fields (title and URL)');
                 return;
             }
-            
-            emptyState.style.display = 'none';
-            assignmentList.innerHTML = '';
-            
-            filteredAssignments.forEach(assignment => {
-                const li = document.createElement('li');
-                li.className = `assignment-item ${assignment.completed ? 'completed' : ''}`;
-                
-                // Calculate days until deadline
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-                const deadlineDate = new Date(assignment.deadline);
-                deadlineDate.setHours(0, 0, 0, 0);
-                const daysUntil = Math.ceil((deadlineDate - today) / (1000 * 60 * 60 * 24));
-                
-                let deadlineClass = 'safe';
-                if (daysUntil < 0) deadlineClass = 'urgent';
-                else if (daysUntil <= 3) deadlineClass = 'approaching';
-                
-                let deadlineText = '';
-                if (daysUntil < 0) deadlineText = `${Math.abs(daysUntil)} days overdue`;
-                else if (daysUntil === 0) deadlineText = 'Due today';
-                else if (daysUntil === 1) deadlineText = 'Due tomorrow';
-                else deadlineText = `Due in ${daysUntil} days`;
-                
-                li.innerHTML = `
-                    <div class="assignment-info">
-                        <div class="assignment-title">${assignment.title}</div>
-                        <div class="subject-tag">${assignment.subject}</div>
-                        <span class="priority-badge priority-${assignment.priority}">${assignment.priority}</span>
-                        <p>${assignment.description}</p>
-                        <div class="assignment-details">
-                            <span class="assignment-detail">
-                                <span>📅</span>
-                                <span>${new Date(assignment.deadline).toLocaleDateString()}</span>
-                            </span>
-                            <span class="assignment-detail">
-                                <span>⏱️</span>
-                                <span class="deadline ${deadlineClass}">${deadlineText}</span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="assignment-actions">
-                        <button class="btn-icon edit" data-id="${assignment.id}">✏️</button>
-                        <button class="btn-icon complete" data-id="${assignment.id}">${assignment.completed ? '↩️' : '✅'}</button>
-                        <button class="btn-icon delete" data-id="${assignment.id}">🗑️</button>
-                    </div>
-                `;
-                
-                assignmentList.appendChild(li);
-            });
-            
-            // Add event listeners to buttons
-            document.querySelectorAll('.btn-icon.edit').forEach(btn => {
-                btn.addEventListener('click', handleEdit);
-            });
-            
-            document.querySelectorAll('.btn-icon.complete').forEach(btn => {
-                btn.addEventListener('click', handleToggleComplete);
-            });
-            
-            document.querySelectorAll('.btn-icon.delete').forEach(btn => {
-                btn.addEventListener('click', handleDelete);
-            });
+        
+            if (editingAppId !== null) {
+                // Update existing app link
+                const index = appLinks.findIndex(a => a.id === editingAppId);
+                if (index !== -1) {
+                    appLinks[index] = {
+                        ...appLinks[index],
+                        title,
+                        url,
+                        description,
+                        icon
+                    };
+                }
+            } else {
+                // Create new app link
+                const newAppLink = {
+                    id: Date.now().toString(),
+                    title,
+                    url,
+                    description,
+                    icon: icon || '🔗',
+                    createdAt: new Date().toISOString()
+                };
+                appLinks.push(newAppLink);
+            }
+        
+            // Save to localStorage
+            localStorage.setItem('appLinks', JSON.stringify(appLinks));
+        
+            // Hide form and render app links
+            appLinkForm.style.display = 'none';
+            renderAppLinks();
+        });
+        
+        // Generate priority badge
+        function getPriorityBadge(priority) {
+            const priorityClass = `priority-${priority}`;
+            return `<span class="priority-badge ${priorityClass}">${priority}</span>`;
         }
-
-        // Toggle complete status
-        function handleToggleComplete(e) {
-            const id = e.target.dataset.id;
-            const index = assignments.findIndex(a => a.id === id);
+        
+        // Calculate deadline status
+        function getDeadlineStatus(deadline) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
             
+            const deadlineDate = new Date(deadline);
+            deadlineDate.setHours(0, 0, 0, 0);
+            
+            const daysUntil = Math.ceil((deadlineDate - today) / (1000 * 60 * 60 * 24));
+            
+            if (daysUntil < 0) {
+                return { status: 'urgent', text: 'Overdue!' };
+            } else if (daysUntil === 0) {
+                return { status: 'urgent', text: 'Due Today!' };
+            } else if (daysUntil <= 3) {
+                return { status: 'approaching', text: `${daysUntil} day${daysUntil > 1 ? 's' : ''} left` };
+            } else {
+                return { status: 'safe', text: `${daysUntil} days left` };
+            }
+        }
+        
+        // Format date for display
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+        
+        // Toggle assignment completion
+        function toggleAssignmentCompletion(id) {
+            const index = assignments.findIndex(a => a.id === id);
             if (index !== -1) {
                 assignments[index].completed = !assignments[index].completed;
-                assignments[index].lastUpdated = new Date().toISOString();
                 localStorage.setItem('assignments', JSON.stringify(assignments));
                 renderAssignments();
                 updateStats();
             }
         }
-
+        
         // Edit assignment
-        function handleEdit(e) {
-            const id = e.target.dataset.id;
+        function editAssignment(id) {
             const assignment = assignments.find(a => a.id === id);
-            
             if (assignment) {
-                // Fill the form with assignment data
+                editingId = id;
                 document.getElementById('assignmentTitle').value = assignment.title;
                 document.getElementById('assignmentSubject').value = assignment.subject;
-                document.getElementById('assignmentDescription').value = assignment.description;
+                document.getElementById('assignmentDescription').value = assignment.description || '';
                 document.getElementById('assignmentDeadline').value = assignment.deadline;
                 document.getElementById('assignmentPriority').value = assignment.priority;
                 
-                // Set editing state
-                editingId = id;
-                
-                // Show the form
                 assignmentForm.style.display = 'block';
                 document.getElementById('assignmentTitle').focus();
-                
-                // Scroll to form
-                assignmentForm.scrollIntoView({ behavior: 'smooth' });
             }
         }
-
+        
+        // Edit app link
+        function editAppLink(id) {
+            const appLink = appLinks.find(a => a.id === id);
+            if (appLink) {
+                editingAppId = id;
+                document.getElementById('appTitle').value = appLink.title;
+                document.getElementById('appUrl').value = appLink.url;
+                document.getElementById('appDescription').value = appLink.description || '';
+                document.getElementById('appIcon').value = appLink.icon || '';
+                
+                appLinkForm.style.display = 'block';
+                document.getElementById('appTitle').focus();
+            }
+        }
+        
         // Delete assignment
-        function handleDelete(e) {
-            const id = e.target.dataset.id;
-            
+        function deleteAssignment(id) {
             if (confirm('Are you sure you want to delete this assignment?')) {
                 assignments = assignments.filter(a => a.id !== id);
                 localStorage.setItem('assignments', JSON.stringify(assignments));
@@ -913,20 +1115,133 @@
                 updateStats();
             }
         }
-
-        // Update statistics
-        function updateStats() {
-            const total = assignments.length;
-            const completed = assignments.filter(a => a.completed).length;
-            const pending = total - completed;
-            
-            totalAssignments.textContent = total;
-            completedAssignments.textContent = completed;
-            pendingAssignments.textContent = pending;
+        
+        // Delete app link
+        function deleteAppLink(id) {
+            if (confirm('Are you sure you want to delete this app link?')) {
+                appLinks = appLinks.filter(a => a.id !== id);
+                localStorage.setItem('appLinks', JSON.stringify(appLinks));
+                renderAppLinks();
+            }
         }
-
+        
+        // Filter assignments
+        function filterAssignments() {
+            const searchTerm = searchAssignment.value.toLowerCase();
+            const statusFilter = filterStatus.value;
+            const priorityFilter = filterPriority.value;
+            
+            return assignments.filter(assignment => {
+                // Search term
+                const matchesSearch = 
+                    assignment.title.toLowerCase().includes(searchTerm) ||
+                    assignment.subject.toLowerCase().includes(searchTerm) ||
+                    (assignment.description && assignment.description.toLowerCase().includes(searchTerm));
+                
+                // Status
+                const matchesStatus = 
+                    statusFilter === 'all' || 
+                    (statusFilter === 'completed' && assignment.completed) ||
+                    (statusFilter === 'pending' && !assignment.completed);
+                
+                // Priority
+                const matchesPriority = 
+                    priorityFilter === 'all' || 
+                    assignment.priority === priorityFilter;
+                
+                return matchesSearch && matchesStatus && matchesPriority;
+            });
+        }
+        
+        // Render assignments
+        function renderAssignments() {
+            const filteredAssignments = filterAssignments();
+            
+            if (filteredAssignments.length === 0) {
+                assignmentList.innerHTML = '';
+                emptyState.style.display = 'block';
+            } else {
+                emptyState.style.display = 'none';
+                
+                // Sort assignments by deadline (closest first)
+                filteredAssignments.sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
+                
+                assignmentList.innerHTML = filteredAssignments.map(assignment => {
+                    const deadlineInfo = getDeadlineStatus(assignment.deadline);
+                    const completedClass = assignment.completed ? 'completed' : '';
+                    
+                    return `
+                        <li class="assignment-item ${completedClass}" data-id="${assignment.id}">
+                            <div class="assignment-info">
+                                <h3 class="assignment-title">${assignment.title}</h3>
+                                <span class="subject-tag">${assignment.subject}</span>
+                                ${getPriorityBadge(assignment.priority)}
+                                <p>${assignment.description || ''}</p>
+                                <div class="assignment-details">
+                                    <span class="assignment-detail">
+                                        📅 Due: ${formatDate(assignment.deadline)}
+                                    </span>
+                                    <span class="assignment-detail">
+                                        ⏱ <span class="deadline ${deadlineInfo.status}">${deadlineInfo.text}</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="assignment-actions">
+                                <button class="btn-icon complete" onclick="toggleAssignmentCompletion('${assignment.id}')">
+                                    ${assignment.completed ? '↩️' : '✓'}
+                                </button>
+                                <button class="btn-icon edit" onclick="editAssignment('${assignment.id}')">
+                                    ✏️
+                                </button>
+                                <button class="btn-icon delete" onclick="deleteAssignment('${assignment.id}')">
+                                    🗑️
+                                </button>
+                            </div>
+                        </li>
+                    `;
+                }).join('');
+            }
+        }
+        
+        // Render app links
+        function renderAppLinks() {
+            if (appLinks.length === 0) {
+                appLinksGrid.innerHTML = '';
+                emptyAppsState.style.display = 'block';
+            } else {
+                emptyAppsState.style.display = 'none';
+                
+                // Sort app links by title
+                appLinks.sort((a, b) => a.title.localeCompare(b.title));
+                
+                appLinksGrid.innerHTML = appLinks.map(app => {
+                    return `
+                        <div class="app-link-card" data-id="${app.id}">
+                            <div class="app-icon">${app.icon || '🔗'}</div>
+                            <h3 class="app-title">${app.title}</h3>
+                            <p class="app-description">${app.description || ''}</p>
+                            <div style="margin-top: 15px; display: flex; gap: 10px;">
+                                <a href="${app.url}" target="_blank" class="btn-icon">🔗</a>
+                                <button class="btn-icon edit" onclick="editAppLink('${app.id}')">✏️</button>
+                                <button class="btn-icon delete" onclick="deleteAppLink('${app.id}')">🗑️</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+        
+        // Update stats
+        function updateStats() {
+            totalAssignments.textContent = assignments.length;
+            completedAssignments.textContent = assignments.filter(a => a.completed).length;
+            pendingAssignments.textContent = assignments.filter(a => !a.completed).length;
+        }
+        
+        // Event listeners for filters
+        searchAssignment.addEventListener('input', renderAssignments);
+        filterStatus.addEventListener('change', renderAssignments);
+        filterPriority.addEventListener('change', renderAssignments);
+        
         // Initialize app
         init();
-    </script>
-</body>
-</html>
