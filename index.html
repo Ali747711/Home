@@ -3,198 +3,492 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="/assets/web-image.png" type="image/png">
+    <title>My Assignments - Nabiev Azamat</title>
+    <style>
+        @font-face {
+            font-family: 'Avenir';
+            src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/Avenir.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Avenir', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(45deg, #2b5876, #4e4376);
+            color: #fff;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: fadeInDown 0.8s ease-out;
+            border-left: 4px solid #64f38c;
+        }
+        
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #64f38c, #5bf7e2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .student-info {
+            font-size: 1.2rem;
+            color: #f0f0f0;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+        
+        .assignment-center {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
+            animation: pulseEffect 2s infinite alternate;
+        }
+        
+        .assignment-button {
+            background: linear-gradient(45deg, #64f38c, #5bf7e2);
+            color: #333;
+            font-size: 1.2rem;
+            font-weight: 600;
+            padding: 16px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            text-align: center;
+        }
+        
+        .assignment-button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #5bf7e2, #64f38c);
+            z-index: -1;
+            transition: 0.5s;
+            transform: scaleX(0);
+            transform-origin: 0 50%;
+            border-radius: 50px;
+        }
+        
+        .assignment-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            color: #222;
+        }
+        
+        .assignment-button:hover:before {
+            transform: scaleX(1);
+        }
+        
+        .assignments-container {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            max-height: 650px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.5) rgba(255, 255, 255, 0.1);
+        }
+        
+        .assignments-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .assignments-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        
+        .assignments-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+        
+        .assignment-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+            border-image: linear-gradient(to bottom, #64f38c, #5bf7e2) 1;
+        }
+        
+        .assignment-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.07));
+        }
+        
+        .assignment-title {
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .assignment-number {
+            display: inline-block;
+            background: linear-gradient(45deg, #64f38c, #5bf7e2);
+            color: #333;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .assignment-due {
+            font-size: 0.9rem;
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+        
+        .assignment-desc {
+            margin-bottom: 20px;
+            line-height: 1.6;
+            color: #f0f0f0;
+        }
+        
+        .progress-container {
+            height: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #64f38c, #5bf7e2);
+            border-radius: 4px;
+            transition: width 0.6s ease;
+            width: 0;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .open-link {
+            padding: 10px 24px;
+            background: linear-gradient(45deg, #64f38c, #5bf7e2);
+            color: #333;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .open-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .grade-options {
+            display: flex;
+        }
+        
+        .grade-btn {
+            width: 40px;
+            height: 40px;
+            margin-left: 10px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            color: #333;
+        }
+        
+        .grade-btn.graded {
+            background: #e0e0e0;
+        }
+        
+        .grade-btn.ungraded {
+            background: #e0e0e0;
+        }
+        
+        .grade-btn.graded.active {
+            background: linear-gradient(45deg, #64f38c, #5bf7e2);
+            color: #333;
+            transform: scale(1.1);
+        }
+        
+        .grade-btn.ungraded.active {
+            background: linear-gradient(45deg, #ff5e62, #ff9966);
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .grade-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulseEffect {
+            0% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(1.05);
+            }
+        }
+        
+        /* Delay card animations */
+        .assignment-card:nth-child(1) { animation-delay: 0.1s; }
+        .assignment-card:nth-child(2) { animation-delay: 0.2s; }
+        .assignment-card:nth-child(3) { animation-delay: 0.3s; }
+        .assignment-card:nth-child(4) { animation-delay: 0.4s; }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .student-info {
+                font-size: 1rem;
+            }
+            
+            .assignment-card {
+                padding: 20px;
+            }
+            
+            .assignment-title {
+                font-size: 1.2rem;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .grade-options {
+                margin-top: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="logo">
-                <h1>Personal Dashboard</h1>
-                <p>Manage your tasks, apps, and life in one place</p>
-            </div>
-        </div>
-    </header>
-
     <div class="container">
-        <!-- Profile Section -->
-        <section class="profile">
-            <div class="profile-info">
-                <h2>Your Profile</h2>
-                <div contenteditable="true" id="profileName" class="form-control" style="margin-bottom: 10px; font-weight: bold;">Your Name</div>
-                <div contenteditable="true" id="profileBio" class="form-control" style="min-height: 80px;">Add your bio or any information about yourself here. Click to edit.</div>
-                
-                <div class="profile-stats">
-                    <div class="stat-card">
-                        <h3 id="totalAssignments">0</h3>
-                        <p>Total</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3 id="completedAssignments">0</h3>
-                        <p>Completed</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3 id="pendingAssignments">0</h3>
-                        <p>Pending</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- App Links Section -->
-        <section class="apps-container">
-            <div class="section-header">
-                <h2>Your Applications</h2>
-                <button id="addAppLinkBtn" class="btn btn-primary">
-                    <span>+</span> Add New App Link
-                </button>
-            </div>
-
-            <!-- App Link Form -->
-            <div id="appLinkForm" class="app-link-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="appTitle">App Title</label>
-                        <input type="text" id="appTitle" class="form-control" placeholder="Enter app title">
-                    </div>
-                    <div class="form-group">
-                        <label for="appUrl">URL</label>
-                        <input type="url" id="appUrl" class="form-control" placeholder="https://example.com">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="appDescription">Description</label>
-                    <input type="text" id="appDescription" class="form-control" placeholder="Brief description">
-                </div>
-                <div class="form-group">
-                    <label for="appIcon">Icon (Emoji or Symbol)</label>
-                    <input type="text" id="appIcon" class="form-control" placeholder="📊">
-                </div>
-                <div class="form-actions">
-                    <button id="cancelAppBtn" class="btn btn-danger">Cancel</button>
-                    <button id="saveAppLinkBtn" class="btn btn-primary">Save App Link</button>
-                </div>
-            </div>
-
-            <!-- App Links Grid -->
-            <div id="appLinksGrid" class="app-links-grid">
-                <!-- App links will be added here dynamically -->
-            </div>
-
-            <!-- Empty State for App Links -->
-            <div id="emptyAppsState" class="empty-state">
-                <img src="/api/placeholder/200/200" alt="No app links">
-                <h3>No app links yet!</h3>
-                <p>Add your first app link by clicking the "Add New App Link" button above.</p>
-            </div>
-        </section>
-
-        <!-- Assignment Section -->
-        <section class="assignment-container">
-            <div class="section-header">
-                <h2>Your Assignments</h2>
-                <button id="addAssignmentBtn" class="btn btn-primary">
-                    <span>+</span> Add New Assignment
-                </button>
-            </div>
-
-            <!-- Filter & Search -->
-            <div class="filter-section">
-                <div class="search-container">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" id="searchAssignment" class="form-control" placeholder="Search assignments...">
-                </div>
-                <div class="filter-group">
-                    <select id="filterStatus" class="form-control">
-                        <option value="all">All Status</option>
-                        <option value="completed">Completed</option>
-                        <option value="pending">Pending</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <select id="filterPriority" class="form-control">
-                        <option value="all">All Priorities</option>
-                        <option value="high">High Priority</option>
-                        <option value="medium">Medium Priority</option>
-                        <option value="low">Low Priority</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Assignment Form -->
-            <div id="assignmentForm" class="assignment-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="assignmentTitle">Assignment Title</label>
-                        <input type="text" id="assignmentTitle" class="form-control" placeholder="Enter assignment title">
-                    </div>
-                    <div class="form-group">
-                        <label for="assignmentSubject">Subject</label>
-                        <input type="text" id="assignmentSubject" class="form-control" placeholder="Enter subject">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="assignmentDescription">Description</label>
-                    <textarea id="assignmentDescription" class="form-control" rows="3" placeholder="Enter assignment description"></textarea>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="assignmentDeadline">Deadline</label>
-                        <input type="date" id="assignmentDeadline" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="assignmentPriority">Priority</label>
-                        <select id="assignmentPriority" class="form-control">
-                            <option value="low">Low</option>
-                            <option value="medium">Medium</option>
-                            <option value="high">High</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-actions">
-                    <button id="cancelBtn" class="btn btn-danger">Cancel</button>
-                    <button id="saveAssignmentBtn" class="btn btn-primary">Save Assignment</button>
-                </div>
-            </div>
-
-            <!-- Assignment List -->
-            <ul id="assignmentList" class="assignment-list">
-                <!-- Assignments will be added here dynamically -->
-            </ul>
-
-            <!-- Empty State -->
-            <div id="emptyState" class="empty-state">
-                <img src="/api/placeholder/200/200" alt="No assignments">
-                <h3>No assignments yet!</h3>
-                <p>Add your first assignment by clicking the "Add New Assignment" button above.</p>
-            </div>
-        </section>
-    </div>
-
-    <!-- Footer with Social Links -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="social-links">
-                    <a href="#" id="linkedinLink" class="social-link linkedin">
-                        <span>in</span>
-                    </a>
-                    <a href="#" id="githubLink" class="social-link github">
-                        <span>GH</span>
-                    </a>
-                    <a href="#" id="instagramLink" class="social-link instagram">
-                        <span>IG</span>
-                    </a>
-                    <a href="#" id="emailLink" class="social-link email">
-                        <span>✉️</span>
-                    </a>
-                </div>
-                <p class="copyright">© <span id="currentYear">2025</span> <span id="copyrightName">Your Name</span>. All rights reserved.</p>
-            </div>
+        <header>
+            <h1>My Assignments</h1>
+            <div class="student-info">Nabiev Azamat | Student ID: 2217423</div>
+        </header>
+        
+        <div class="assignment-center">
+            <a href="#assignments-section" class="assignment-button">View My Assignments</a>
         </div>
-    </footer>
-
-    <script src="script.js"></script>
+        
+        <div class="assignments-container" id="assignments-section">
+            <!-- Assignment cards will be generated here -->
+        </div>
+    </div>
+    
+    <script>
+        // Updated assignment data with your actual first assignment link
+        const assignments = [
+            {
+                id: 1,
+                number: 1,
+                title: "Flow NA",
+                dueDate: "April 10, 2025",
+                description: "Create a responsive website using HTML, CSS, and JavaScript with interactive elements and proper documentation.",
+                progress: 100,
+                link: "https://ali747711.github.io/Flow-NA/"
+            },
+            {
+                id: 2,
+                number: 2,
+                title: "Assignment 2",
+                dueDate: "April 15, 2025",
+                description: "Design and implement a relational database with normalized tables and write complex SQL queries to extract meaningful information.",
+                progress: 40,
+                link: "#" // Replace with your actual assignment link
+            },
+            {
+                id: 3,
+                number: 3,
+                title: "Assignment 3",
+                dueDate: "April 20, 2025",
+                description: "Analyze the time and space complexity of various sorting algorithms and implement optimized versions for specific use cases.",
+                progress: 20,
+                link: "#" // Replace with your actual assignment link
+            },
+            {
+                id: 4,
+                number: 4,
+                title: "Assignment 4",
+                dueDate: "May 5, 2025",
+                description: "Design a user-friendly interface for a mobile application with focus on accessibility and user experience principles.",
+                progress: 0,
+                link: "#" // Replace with your actual assignment link
+            }
+        ];
+        
+        // Store grading status
+        let gradingStatus = {};
+        
+        // Load saved grading status from localStorage
+        function loadSavedGradingStatus() {
+            const savedStatus = localStorage.getItem('gradingStatus');
+            if (savedStatus) {
+                gradingStatus = JSON.parse(savedStatus);
+            }
+        }
+        
+        // Function to create assignment cards
+        function createAssignmentCards() {
+            const assignmentsContainer = document.querySelector('.assignments-container');
+            assignmentsContainer.innerHTML = '';
+            
+            assignments.forEach((assignment) => {
+                // Set default grading status if not already set
+                if (gradingStatus[assignment.id] === undefined) {
+                    gradingStatus[assignment.id] = null; // null means neither graded nor ungraded
+                }
+                
+                const card = document.createElement('div');
+                card.className = 'assignment-card';
+                
+                card.innerHTML = `
+                    <div class="assignment-title">
+                        <span><span class="assignment-number">${assignment.number}</span>${assignment.title}</span>
+                    </div>
+                    <div class="assignment-due">Due: ${assignment.dueDate}</div>
+                    <div class="assignment-desc">${assignment.description}</div>
+                    <div class="progress-container">
+                        <div class="progress-bar" style="width: ${assignment.progress}%"></div>
+                    </div>
+                    <div class="action-buttons">
+                        <a href="${assignment.link}" class="open-link" target="_blank">Open Assignment ${assignment.number}</a>
+                        <div class="grade-options">
+                            <button class="grade-btn graded ${gradingStatus[assignment.id] === 'graded' ? 'active' : ''}" 
+                                    onclick="toggleGrading(${assignment.id}, 'graded')">✓</button>
+                            <button class="grade-btn ungraded ${gradingStatus[assignment.id] === 'ungraded' ? 'active' : ''}" 
+                                    onclick="toggleGrading(${assignment.id}, 'ungraded')">✗</button>
+                        </div>
+                    </div>
+                `;
+                
+                assignmentsContainer.appendChild(card);
+            });
+        }
+        
+        // Function to toggle grading status
+        function toggleGrading(id, status) {
+            if (gradingStatus[id] === status) {
+                // If clicking the same status, turn it off
+                gradingStatus[id] = null;
+            } else {
+                // Otherwise, set to the new status
+                gradingStatus[id] = status;
+            }
+            
+            // Update the UI
+            createAssignmentCards();
+            
+            // Save to localStorage (persist data)
+            localStorage.setItem('gradingStatus', JSON.stringify(gradingStatus));
+        }
+        
+        // Smooth scroll function for the view assignments button
+        document.addEventListener('DOMContentLoaded', function() {
+            const viewButton = document.querySelector('.assignment-button');
+            
+            viewButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 20,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // Initialize the page
+            loadSavedGradingStatus();
+            createAssignmentCards();
+            
+            // Animate progress bars on load
+            setTimeout(() => {
+                const progressBars = document.querySelectorAll('.progress-bar');
+                progressBars.forEach(bar => {
+                    const width = bar.style.width;
+                    bar.style.width = '0';
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 100);
+                });
+            }, 500);
+        });
+    </script>
 </body>
 </html>
